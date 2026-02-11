@@ -17,6 +17,8 @@ program
     .description('CLI to scaffold Masti app stack')
     .version('1.0.0')
     .option('-n, --name <name>', 'Project name')
+    .option('-p, --db-preset <preset>', 'Database preset (local, neon, supabase, custom)')
+    .option('-u, --db-url <url>', 'Database URL')
     .action(async (options) => {
         try {
             console.log(chalk.bold.blue('\n🚀 Welcome to create-turbo-starter!\n'));
@@ -46,47 +48,64 @@ program
                 process.exit(1);
             }
 
-            const dbAnswer = await inquirer.prompt([
-                {
-                    type: 'list',
-                    name: 'dbPreset',
-                    message: 'Choose your PostgreSQL setup:',
-                    choices: [
-                        { name: 'Local PostgreSQL', value: 'local' },
-                        { name: 'Neon (Serverless)', value: 'neon' },
-                        { name: 'Supabase', value: 'supabase' },
-                        { name: 'Custom PostgreSQL URL', value: 'custom' }
-                    ]
-                }
-            ]);
-
-            let databaseUrl = '';
-
-            if (dbAnswer.dbPreset === 'local') {
-                const localAnswer = await inquirer.prompt([{
-                    type: 'input',
-                    name: 'url',
-                    message: 'Enter your Local PostgreSQL URL:',
-                    default: 'postgresql://postgres:postgres@localhost:5432/my-app',
-                    validate: (input) => input.startsWith('postgres') ? true : 'Must start with postgresql://'
-                }]);
-                databaseUrl = localAnswer.url;
-            } else {
-                const urlAnswer = await inquirer.prompt([{
-                    type: 'input',
-                    name: 'url',
-                    message: `Enter your ${dbAnswer.dbPreset === 'custom' ? 'PostgreSQL' : dbAnswer.dbPreset} connection string:`,
-                    validate: (input) => input.length > 0 ? true : 'URL cannot be empty'
-                }]);
-                databaseUrl = urlAnswer.url;
+            let dbPreset = options.dbPreset;
+            if (!dbPreset) {
+                const dbAnswer = await inquirer.prompt([
+                    {
+                        type: 'list',
+                        name: 'dbPreset',
+                        message: 'Choose your PostgreSQL setup:',
+                        choices: [
+                            { name: 'Local PostgreSQL', value: 'local' },
+                            { name: 'Neon (Serverless)', value: 'neon' },
+                            { name: 'Supabase', value: 'supabase' },
+                            { name: 'Custom PostgreSQL URL', value: 'custom' }
+                        ]
+                    }
+                ]);
+                dbPreset = dbAnswer.dbPreset;
             }
+
+            let databaseUrl = options.dbUrl || '';
+
+            if (!databaseUrl) {
+                if (dbPreset === 'local') {
+                    const localAnswer = await inquirer.prompt([{
+                        type: 'input',
+                        name: 'url',
+                        message: 'Enter your Local PostgreSQL URL:',
+                        default: 'postgresql://postgres:postgres@localhost:5432/my-app',
+                        validate: (input) => input.startsWith('postgres') ? true : 'Must start with postgresql://'
+                    }]);
+                    databaseUrl = localAnswer.url;
+                } else {
+                    const urlAnswer = await inquirer.prompt([{
+                        type: 'input',
+                        name: 'url',
+                        message: `Enter your ${dbPreset === 'custom' ? 'PostgreSQL' : dbPreset} connection string:`,
+                        validate: (input) => input.length > 0 ? true : 'URL cannot be empty'
+                    }]);
+                    databaseUrl = urlAnswer.url;
+                }
+            }
+
+
 
             console.log(''); // spacer
 
             const spinner = ora(`Scaffolding project in ${chalk.bold(targetDir)}...`).start();
 
             const templateDir = path.resolve(__dirname, '../template');
-            await fs.copy(templateDir, targetDir);
+            await fs.copy(templateDir, targetDir, {
+                filter: (src) => {
+                    const basename = path.basename(src);
+                    return basename !== 'node_modules' &&
+                        basename !== 'dist' &&
+                        basename !== '.turbo' &&
+                        basename !== '.DS_Store' &&
+                        !src.includes('src/generated'); // Exclude Prisma generated clients
+                }
+            });
 
             spinner.succeed('Project scaffolded successfully');
 
