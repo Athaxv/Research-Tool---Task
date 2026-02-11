@@ -1,6 +1,12 @@
 import { Command } from 'commander';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
+import fs from 'fs-extra';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const program = new Command();
 
@@ -26,6 +32,22 @@ program
         ]);
 
         console.log(chalk.green(`Creating project: ${answers.projectName}`));
+
+        const targetDir = path.join(process.cwd(), answers.projectName);
+        const templateDir = path.resolve(__dirname, '../template');
+
+        try {
+            await fs.copy(templateDir, targetDir);
+            console.log(chalk.green('Project created successfully!'));
+            console.log(chalk.white(`
+To get started:
+  cd ${answers.projectName}
+  pnpm install
+  pnpm dev
+`));
+        } catch (err) {
+            console.error(chalk.red('Error creating project:', err));
+        }
     });
 
 program.parse(process.argv);
