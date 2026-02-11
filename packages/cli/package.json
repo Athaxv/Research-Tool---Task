@@ -1,12 +1,12 @@
 {
-    "name": "turbo-stack",
+    "name": "create-turbo-starter",
     "version": "1.0.0",
     "description": "CLI to scaffold Full Stack monorepo",
     "private": false,
     "type": "module",
     "main": "dist/index.js",
     "bin": {
-        "turbo-stack": "bin/index.js"
+        "create-turbo-starter": "bin/index.js"
     },
     "scripts": {
         "build": "tsc",
@@ -25,7 +25,7 @@
         "execa": "^8.0.0",
         "fs-extra": "^11.2.0",
         "inquirer": "^9.2.14",
-        "ora": "^8.0.0"
+        "ora": "^8.2.0"
     },
     "devDependencies": {
         "@types/fs-extra": "^11.0.4",

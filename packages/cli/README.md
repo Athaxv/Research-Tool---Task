@@ -1,87 +1,86 @@
-# turbo-stack
+# create-turbo-starter
 
 A CLI tool to scaffold a full-stack monorepo with Next.js, Express, WebSocket, and Prisma (NeonDB).
 
 ## Features
 
-- **Frontend**: Next.js (App Router, TailwindCSS)
-- **Backend**: Express.js server (Port 5000)
-- **WebSocket**: Native WebSocket server (Port 8080)
-- **Database**: Prisma ORM with NeonDB (PostgreSQL)
-- **Monorepo**: Powered by Turborepo
+- **Interactive Setup**: Prompts for project name and database configuration.
+- **PostgreSQL Support**: Built-in presets for Local, Neon, Supabase, or custom URLs.
+- **Automated Setup**:
+    - Scaffolds the monorepo structure.
+    - Installs dependencies (`pnpm install`).
+    - Generates Prisma Client (`prisma generate`).
+- **Production Ready**: Includes `.env` configuration and error handling.
+- **Monorepo**: Powered by Turborepo.
+
+## Tech Stack & Versions
+
+The scaffolded project is built with the following technologies:
+
+| Package | Version | Description |
+| :--- | :--- | :--- |
+| **Next.js** | `16.1.6` | React Framework for Frontend |
+| **React** | `19.2.3` | UI Library |
+| **Express** | `5.2.1` | Backend Framework |
+| **Prisma** | `7.3.0` | ORM for PostgreSQL |
+| **ws** | `8.19.0` | WebSocket Implementation |
+| **TailwindCSS** | `4.0.0` | Utility-first CSS Framework |
+| **TypeScript** | `5.0+` | Static Type Checking |
 
 ## Installation
 
 You can run the CLI directly using `npx`:
 
 ```bash
-npx turbo-stack init
+npx create-turbo-starter
 ```
 
 Or install it globally:
 
 ```bash
-npm install -g turbo-stack
+npm install -g create-turbo-starter
 ```
 
 ## Usage
 
-Run the initialization command:
+Run the command and follow the prompts:
 
 ```bash
-npx turbo-stack init
+npx create-turbo-starter
 ```
 
-Follow the prompts:
-1.  **Project Name**: Enter the name of your new project folder (default: `my-masti-app`).
-2.  **Database URL**: Enter your NeonDB PostgreSQL connection string (e.g., `postgres://user:pass@ep-xyz.region.neondb.net/neondb`).
+### 1. Project Name
+Enter your desired project name (e.g., `my-app`). The CLI will check if the folder already exists to prevent accidental overwrites.
 
-### What's Included?
+### 2. Database Setup
+Choose your PostgreSQL provider:
+- **Local PostgreSQL**: Enter your local connection string.
+- **Neon (Serverless)**: Enter your cloud connection string.
+- **Supabase**: Enter your Supabase connection string.
+- **Custom**: Provide any valid PostgreSQL URL.
 
-The CLI scaffolds a monorepo with the following structure:
-
-```
-turbo-stack/
-├── apps/
-│   ├── web/          # Next.js frontend
-│   ├── backend/      # Express server (Port 5000)
-│   └── websocket/    # WebSocket server (Port 8080)
-├── packages/
-│   ├── db/           # Shared Prisma client and schema
-│   ├── ui/           # Shared UI components
-│   └── ...
-├── package.json
-└── turbo.json
-```
+### 3. Sit Back
+The CLI will automatically:
+1.  Copy the template files.
+2.  Set up `.env` and `.env.example` files.
+3.  Install dependencies using `pnpm`.
+4.  Generate the Prisma client.
 
 ## Getting Started
 
-After the scaffold is complete:
+Once the setup is complete, simply run:
 
-1.  Navigate to your project:
-    ```bash
-    cd turbo-stack
-    ```
+```bash
+cd <your-project-name>
+pnpm dev
+```
 
-2.  Install dependencies:
-    ```bash
-    pnpm install
-    ```
-
-3.  Generate the Prisma client:
-    ```bash
-    pnpm run db:generate
-    ```
-
-4.  Start the development servers:
-    ```bash
-    pnpm dev
-    ```
-
-This will start all applications in parallel using Turborepo.
+This will start all services (Frontend, Backend, WebSocket) in development mode.
 
 ## Environment Variables
 
-The CLI automatically creates a `.env` file in `packages/db` with your provided `DATABASE_URL`.
+The CLI automatically creates `.env` and `.env.example` files in:
+- `packages/db/`
+- `apps/backend/`
 
-**Note**: Ensure your NeonDB is accessible and the connection string is correct.
+It populates them with the `DATABASE_URL` you provided.
