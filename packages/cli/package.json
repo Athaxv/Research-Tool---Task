@@ -1,12 +1,12 @@
 {
-    "name": "@repo/cli",
+    "name": "turbo-stack",
     "version": "1.0.0",
     "description": "CLI to scaffold Full Stack monorepo",
     "private": false,
     "type": "module",
     "main": "dist/index.js",
     "bin": {
-        "@repo/cli": "bin/index.js"
+        "turbo-stack": "bin/index.js"
     },
     "scripts": {
         "build": "tsc",

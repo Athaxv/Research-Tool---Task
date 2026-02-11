@@ -11,7 +11,8 @@ const __dirname = path.dirname(__filename);
 const program = new Command();
 
 program
-    .name('create-masti-app')
+program
+    .name('turbo-stack')
     .description('CLI to scaffold Masti app stack')
     .version('1.0.0');
 
@@ -21,7 +22,7 @@ program
     .option('-n, --name <name>', 'Project name')
     .option('-d, --db-url <url>', 'Database URL')
     .action(async (options) => {
-        console.log(chalk.blue('Welcome to create-masti-app!'));
+        console.log(chalk.blue('Welcome to turbo-stack!'));
 
         let answers: { projectName: string; databaseUrl: string } = {
             projectName: '',

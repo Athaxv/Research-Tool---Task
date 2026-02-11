@@ -1,4 +1,4 @@
-# @repo/cli
+# turbo-stack
 
 A CLI tool to scaffold a full-stack monorepo with Next.js, Express, WebSocket, and Prisma (NeonDB).
 
@@ -15,13 +15,13 @@ A CLI tool to scaffold a full-stack monorepo with Next.js, Express, WebSocket, a
 You can run the CLI directly using `npx`:
 
 ```bash
-npx @repo/cli init
+npx turbo-stack init
 ```
 
-Or install it globally (local development):
+Or install it globally:
 
 ```bash
-pnpm add -g @repo/cli
+npm install -g turbo-stack
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ pnpm add -g @repo/cli
 Run the initialization command:
 
 ```bash
-npx @repo/cli init
+npx turbo-stack init
 ```
 
 Follow the prompts:
