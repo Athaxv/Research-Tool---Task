@@ -1,28 +1,17 @@
 import express from "express";
-import { WebSocketServer } from "ws";
+import { client } from "@repo/db";
 
 const app = express();
 
-app.get("/", (req, res) => {
-    res.send("Hello World!");
+app.get("/", async (req, res) => {
+    try {
+        await client.$connect();
+        res.send("Hello World! Database connected.");
+    } catch (e) {
+        res.status(500).send("Database connection failed");
+    }
 });
 
-const server = app.listen(3000, () => {
+app.listen(3000, () => {
     console.log("Server started on port 3000");
-});
-
-const wss = new WebSocketServer({ server });
-
-wss.on("connection", (ws) => {
-    ws.on("error", console.error);
-
-    ws.on("message", (data, isBinary) => {
-        wss.clients.forEach((client) => {
-            if (client.readyState === WebSocket.OPEN && client !== ws) {
-                client.send(data, { binary: isBinary });
-            }
-        });
-    });
-
-    ws.send("Hello! Message From Server!!");
 });
