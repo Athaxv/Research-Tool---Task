@@ -1,11 +1,12 @@
+import "dotenv/config";
 import express from "express";
-import { client } from "@repo/db";
+import { prisma } from "@repo/db";
 
 const app = express();
 
 app.get("/", async (req, res) => {
     try {
-        await client.$connect();
+        await prisma.$connect();
         res.send("Hello World! Database connected.");
     } catch (e) {
         res.status(500).send("Database connection failed");
