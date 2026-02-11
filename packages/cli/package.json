@@ -2,6 +2,7 @@
     "name": "create-masti-app",
     "version": "1.0.0",
     "description": "CLI to scaffold Masti app stack",
+    "type": "module",
     "main": "dist/index.js",
     "bin": {
         "create-masti-app": "bin/index.js"
