@@ -15,7 +15,7 @@ const exclude = [
     '.next',
     '.git',
     '.vscode',
-    'packages/cli' // Don't include the CLI itself in the template
+    path.join('packages', 'cli') // Don't include the CLI itself in the template
 ];
 
 async function copyTemplate() {
@@ -24,8 +24,9 @@ async function copyTemplate() {
     await fs.ensureDir(templateDir);
     await fs.emptyDir(templateDir);
 
-    const filter = (src, dest) => {
+    const filter = (src: string, dest: string) => {
         const relative = path.relative(rootDir, src);
+        // console.log(`Checking ${relative}`);
         if (!relative) return true; // root
 
         // Check if path contains any excluded directory
@@ -35,7 +36,10 @@ async function copyTemplate() {
         }
 
         // Exclude specific paths relative to root
-        if (exclude.includes(relative)) return false;
+        if (exclude.includes(relative)) {
+            console.log(`Excluding relative: ${relative}`);
+            return false;
+        }
 
         // Simplify: Don't copy .env files ? Maybe we should but rename to .env.example
         if (path.basename(src) === '.env') return false;
@@ -46,7 +50,10 @@ async function copyTemplate() {
     // Copy specific directories to avoid scanning everything
     const toCopy = [
         'apps',
-        'packages',
+        'packages/db',
+        'packages/ui',
+        'packages/eslint-config',
+        'packages/typescript-config',
         'package.json',
         'pnpm-workspace.yaml',
         'turbo.json',
