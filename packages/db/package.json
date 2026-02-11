@@ -15,8 +15,7 @@
   "scripts": {
     "build": "tsc",
     "db:generate": "prisma generate",
-    "db:push": "prisma db push",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "db:push": "prisma db push"
   },
   "keywords": [],
   "author": "",
